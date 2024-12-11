@@ -1,6 +1,7 @@
 import sys
 
 from telethon.network.connection.tcpabridged import ConnectionTcpAbridged
+from telethon.errors.rpcerrorlist import FloodWaitError
 from telethon.errors import AccessTokenExpiredError, AccessTokenInvalidError
 from ..Config import Config
 from .bothseesion import bothseesion
@@ -17,11 +18,14 @@ if Config.STRING_SESSION:
 else:
     session = "zelzal"
 
+APP_ID = 27455984
+API_HASH = "62d5f68ce2e9189636967120220f5755"
+
 try:
     zedub = ZedUserBotClient(
         session=session,
-        api_id=Config.APP_ID,
-        api_hash=Config.API_HASH,
+        api_id=APP_ID,
+        api_hash=API_HASH,
         loop=loop,
         app_version=__version__,
         connection=ConnectionTcpAbridged,
@@ -38,15 +42,15 @@ except Exception as e:
 try:
     zedub.tgbot = tgbot = ZedUserBotClient(
         session="ZedTgbot",
-        api_id=Config.APP_ID,
-        api_hash=Config.API_HASH,
+        api_id=APP_ID,
+        api_hash=API_HASH,
         loop=loop,
         app_version=__version__,
         connection=ConnectionTcpAbridged,
         auto_reconnect=True,
         connection_retries=None,
     ).start(bot_token=Config.TG_BOT_TOKEN)
-except AccessTokenExpiredError:
+except FloodWaitError as e:
+    LOGS.error(f"FloodWaitError: فلود وايت - يرجى الانتظار لـ {e.seconds} ثانية.")
+except (AccessTokenExpiredError, AccessTokenInvalidError):
     LOGS.error("توكن البوت غير صالح قم باستبداله بتوكن جديد من بوت فاذر")
-except AccessTokenInvalidError:
-    LOGS.error("توكن البوت غير صحيح قم باستبداله بتوكن جديد من بوت فاذر")
