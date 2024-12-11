@@ -10,9 +10,10 @@ from ..core.logger import logging
 
 LOGS = logging.getLogger(__name__)
 
+DB_URI = os.getenv('DB_URI')
 
 def start() -> scoped_session:
-    database_url = Config.DB_URI
+    database_url = DB_URI
     engine = create_engine(database_url)
     BASE.metadata.bind = engine
     BASE.metadata.create_all(engine)
