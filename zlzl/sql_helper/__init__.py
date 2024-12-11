@@ -6,14 +6,17 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 
 # the secret configuration specific things
 from ..Config import Config
-#from ..core.logger import logging
+from ..core.logger import logging
 
-#LOGS = logging.getLogger(__name__)
+LOGS = logging.getLogger(__name__)
 
-DB_URI = Config.DB_URI
 
 def start() -> scoped_session:
-    database_url = DB_URI
+    database_url = (
+        Config.DB_URI.replace("postgres:", "postgresql:")
+        if "postgres://" in Config.DB_URI
+        else Config.DB_URI
+    )
     engine = create_engine(database_url)
     BASE.metadata.bind = engine
     BASE.metadata.create_all(engine)
@@ -24,6 +27,8 @@ try:
     BASE = declarative_base()
     SESSION = start()
 except AttributeError as e:
+    print("- خطأ في قاعدة البيانات")
     print(e)
 except Exception as e:
+    print("- خطأ في قاعدة البيانات")
     print(e)
