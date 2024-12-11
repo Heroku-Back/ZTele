@@ -10,7 +10,7 @@ from ..core.logger import logging
 
 LOGS = logging.getLogger(__name__)
 
-DB_URI = os.getenv('DB_URI')
+DB_URI = Config.DB_URI
 
 def start() -> scoped_session:
     database_url = DB_URI
