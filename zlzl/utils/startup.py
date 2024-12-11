@@ -48,13 +48,7 @@ Zed_Dev = (1895219306, 925972505, 5746412340, 5003461173, 6227985448, 2095357462
 Zzz_Vip = (1895219306, 925972505, 5176749470, 2095357462, 6269975462, 6963296170, 232499688, 1719023510)
 zchannel = {"@zed_thon", "@zzzlvv", "@zzzvrr", "@AAAl1l", "@RR_U_RR", "@zzzzzl1I", "@zzkrr", "@zzclll", "@heroku_error", "@MMM07", "@zziddd"}
 heroku_api = "https://api.heroku.com"
-if Config.HEROKU_APP_NAME is not None and Config.HEROKU_API_KEY is not None:
-    Heroku = heroku3.from_key(Config.HEROKU_API_KEY)
-    app = Heroku.app(Config.HEROKU_APP_NAME)
-    heroku_var = app.config()
-else:
-    app = None
-
+#API_HASH = Config.API_HASH
 
 if ENV:
     VPS_NOLOAD = ["vps"]
@@ -66,34 +60,30 @@ DEV = 1895219306
 
 
 async def autovars(): #Code by T.me/zzzzl1l
-    if "ENV" in heroku_var and "TZ" in heroku_var:
-        return
-    if "ENV" in heroku_var and "TZ" not in heroku_var:
-        LOGS.info("جـارِ اضافـة بقيـة الفـارات .. تلقائيـاً")
-        zzcom = "."
-        zzztz = "Asia/Baghdad"
-        heroku_var["COMMAND_HAND_LER"] = zzcom
-        heroku_var["TZ"] = zzztz
-        LOGS.info("تم اضافـة بقيـة الفـارات .. بنجـاح")
-    if "ENV" not in heroku_var and "TZ" not in heroku_var:
-        LOGS.info("جـارِ اضافـة بقيـة الفـارات .. تلقائيـاً")
-        zzenv = "ANYTHING"
-        zzcom = "."
-        zzztz = "Asia/Baghdad"
-        heroku_var["ENV"] = zzenv
-        heroku_var["COMMAND_HAND_LER"] = zzcom
-        heroku_var["TZ"] = zzztz
-        LOGS.info("تم اضافـة بقيـة الفـارات .. بنجـاح")
+    LOGS.info("جـارِ اضافـة بقيـة الفـارات .. تلقائيـاً")
+    zzenv = "ANYTHING"
+    zzcom = "."
+    zzztz = "Asia/Baghdad"
+    ENV = bool(os.environ.get("ENV", True))
+    Config.COMMAND_HAND_LER = zzcom
+    Config.TZ = zzztz
+    addgvar("T_Z", zzztz)
+    LOGS.info("تم اضافـة بقيـة الفـارات .. بنجـاح")
 
 async def autoname(): #Code by T.me/zzzzl1l
-    if Config.ALIVE_NAME:
+    if gvarstatus("ALIVE_NAME") is not None:
         return
     await bot.start()
     await asyncio.sleep(15)
     LOGS.info("جـارِ اضافة فـار الاسـم التلقـائـي .. انتظـر قليـلاً")
     zlzlal = await bot.get_me()
     zzname = f"{zlzlal.first_name}"
-    tz = Config.TZ
+    tz = "Asia/Baghdad"
+    if gvarstatus("T_Z") is not None:
+        tz = gvarstatus("T_Z")
+    else:
+        addgvar("T_Z", "Asia/Baghdad")
+        tz = gvarstatus("T_Z")
     tzDateTime = dt.now(timezone(tz))
     zdate = tzDateTime.strftime('%Y/%m/%d')
     militaryTime = tzDateTime.strftime('%H:%M')
@@ -106,7 +96,7 @@ async def autoname(): #Code by T.me/zzzzl1l
         addgvar(zd, zzd)
         addgvar(zt, zzt)
     LOGS.info(f"تم اضافـة اسـم المستخـدم {zzname} .. بنجـاح")
-    heroku_var["ALIVE_NAME"] = zzname
+    addgvar("ALIVE_NAME", zzname)
 
 
 async def setup_bot():
