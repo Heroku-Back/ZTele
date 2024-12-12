@@ -48,7 +48,13 @@ Zed_Dev = (1895219306, 925972505, 5746412340, 5003461173, 6227985448, 2095357462
 Zzz_Vip = (1895219306, 925972505, 5176749470, 2095357462, 6269975462, 6963296170, 232499688, 1719023510)
 zchannel = {"@zed_thon", "@zzzlvv", "@zzzvrr", "@AAAl1l", "@RR_U_RR", "@zzzzzl1I", "@zzkrr", "@zzclll", "@heroku_error", "@MMM07", "@zziddd"}
 heroku_api = "https://api.heroku.com"
-#API_HASH = Config.API_HASH
+if Config.HEROKU_APP_NAME is not None and Config.HEROKU_API_KEY is not None:
+    Heroku = heroku3.from_key(Config.HEROKU_API_KEY)
+    app = Heroku.app(Config.HEROKU_APP_NAME)
+    heroku_var = app.config()
+else:
+    app = None
+
 
 if ENV:
     VPS_NOLOAD = ["vps"]
@@ -105,17 +111,24 @@ async def setup_bot():
     """
     try:
         await zedub.connect()
-        config = await zedub(functions.help.GetConfigRequest())
-        for option in config.dc_options:
-            if option.ip_address == zedub.session.server_address:
-                if zedub.session.dc_id != option.id:
-                    LOGS.warning(
-                        f"ايـدي DC ثـابت فـي الجلسـة مـن {zedub.session.dc_id}"
-                        f" الـى {option.id}"
-                    )
-                zedub.session.set_dc(option.id, option.ip_address, option.port)
-                zedub.session.save()
-                break
+        try:
+            config = await zedub(functions.help.GetConfigRequest())
+            for option in config.dc_options:
+                if option.ip_address == zedub.session.server_address:
+                    if zedub.session.dc_id != option.id:
+                        LOGS.warning(
+                            f"ايـدي DC ثـابت فـي الجلسـة مـن {zedub.session.dc_id}"
+                            f" الـى {option.id}"
+                        )
+                    zedub.session.set_dc(option.id, option.ip_address, option.port)
+                    zedub.session.save()
+                    break
+        except Exception as e:
+            if "was used under two different IP addresses" in str(e):
+                pass
+            else:
+                LOGS.error(f"كـود تيرمكس - {str(e)}")
+                sys.exit()
         bot_details = await zedub.tgbot.get_me()
         Config.TG_BOT_USERNAME = f"@{bot_details.username}"
         # await zedub.start(bot_token=Config.TG_BOT_USERNAME)
@@ -126,13 +139,13 @@ async def setup_bot():
     except Exception as e:
         if "object has no attribute 'tgbot'" in str(e):
             LOGS.error(f"- تـوكـن البـوت المسـاعـد غيـر صالـح او منتهـي - {str(e)}")
-            LOGS.error("- شرح تغيير توكن البوت من فارات هيروكو ( https://t.me/Z1ZZP/10 )")
+            #LOGS.error("- شرح تغيير توكن البوت من فارات هيروكو ( https://t.me/Z1ZZP/10 )")
         elif "Cannot cast NoneType to any kind of int" in str(e):
             LOGS.error(f"- كـود تيرمكـس غيـر صالـح او منتهـي - {str(e)}")
-            LOGS.error("- شرح تغيير كود تيرمكس من فارات هيروكو ( https://t.me/heroku_error/25 )")
+            #LOGS.error("- شرح تغيير كود تيرمكس من فارات هيروكو ( https://t.me/heroku_error/25 )")
         elif "was used under two different IP addresses" in str(e):
             LOGS.error(f"- كـود تيرمكـس غيـر صالـح او منتهـي - {str(e)}")
-            LOGS.error("- شرح تغيير كود تيرمكس من فارات هيروكو ( https://t.me/heroku_error/25 )")
+            #LOGS.error("- شرح تغيير كود تيرمكس من فارات هيروكو ( https://t.me/heroku_error/25 )")
         else:
             LOGS.error(f"كـود تيرمكس - {str(e)}")
         sys.exit()
@@ -179,7 +192,7 @@ async def mybot(): #Code by T.me/zzzzl1l
             await bot.send_message("@BotFather", botname)
             await asyncio.sleep(1)
             await bot.send_message("@BotFather", f"•⎆┊انـا البــوت المسـاعـد الخـاص بـ {Zname} \n•⎆┊بـواسطـتـي يمكـنك التواصــل مـع مـالكـي 🧸♥️\n•⎆┊قنـاة السـورس 🌐 @ZThon 🌐")
-            addgvar("z_assistant", True)
+            #addgvar("z_assistant", True)
         except Exception as e:
             print(e)
 
