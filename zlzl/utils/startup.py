@@ -46,7 +46,7 @@ cmdhr = Config.COMMAND_HAND_LER
 Zed_Vip = (1895219306, 6269975462, 6550930943, 5993018048, 5809896714, 1985225531, 6886550001, 925972505, 6038435721, 5746412340, 1762269116, 6272130846, 1052790413, 6055956182, 5059075331, 6669333713, 6328317500, 5616315677, 6227985448, 232499688, 6608224162, 1719023510, 6748495865, 6612882807, 6093001360, 6470835326, 6831274148)
 Zed_Dev = (1895219306, 925972505, 5746412340, 5003461173, 6227985448, 2095357462, 5176749470, 5426390871, 6269975462, 1985225531, 6550930943, 5003461173, 6227985448, 6269975462, 5746412340, 1850533212, 5616315677, 6470835326, 232499688, 6227985448, 1719023510 , 6801349110, 5280339206, 6470835326)
 Zzz_Vip = (1895219306, 925972505, 5176749470, 2095357462, 6269975462, 6963296170, 232499688, 1719023510)
-zchannel = {"@zed_thon", "@zzzlvv", "@zzzvrr", "@AAAl1l", "@RR_U_RR", "@zzzzzl1I", "@zzkrr", "@zzclll", "@heroku_error", "@MMM07", "@zziddd"}
+zchannel = {"@zedthon", "@zzzlvv", "@zzzvrr", "@RR_U_RR", "@zzzzzl1I", "@zzkrr", "@zzclll", "@heroku_error", "@MMM07", "@zziddd"}
 heroku_api = "https://api.heroku.com"
 if Config.HEROKU_APP_NAME is not None and Config.HEROKU_API_KEY is not None:
     Heroku = heroku3.from_key(Config.HEROKU_API_KEY)
@@ -55,12 +55,7 @@ if Config.HEROKU_APP_NAME is not None and Config.HEROKU_API_KEY is not None:
 else:
     app = None
 
-
-if ENV:
-    VPS_NOLOAD = ["vps"]
-elif os.path.exists("config.py"):
-    VPS_NOLOAD = ["heroku"]
-
+VPS_NOLOAD = ["vps"]
 bot = zedub
 DEV = 1895219306
 
@@ -215,7 +210,7 @@ async def startupmessage():
                 BOTLOG_CHATID,
                 "https://telegra.ph/file/f821d27af168206b472ad.mp4",
                 caption=f"**⌔ مرحبـاً عـزيـزي** {zel_zal} 🫂\n**⌔ تـم تشغـيل سـورس زدثــون 🧸♥️**\n**⌔ التنصيب الخاص بـك .. بنجـاح ✅**\n**⌔ لـ تصفح قائمـة الاوامـر 🕹**\n**⌔ ارسـل الامـر** `{cmdhr}مساعده`",
-                buttons=[[Button.url("𝗭𝗧𝗵𝗼𝗻 🎡 𝗨𝘀𝗲𝗿𝗯𝗼𝘁", "https://t.me/ZThon")],[Button.url("الشروحات ²", "https://t.me/MMM07"), Button.url("الشروحات ¹", "https://t.me/zzzlvv")],[Button.url("حلـول الأخطـاء", "https://t.me/heroku_error")],[Button.url("التحـديثـات", "https://t.me/Zed_Thon")],[Button.url("مطـور السـورس", "https://t.me/BBBlibot")]]
+                buttons=[[Button.url("𝗭𝗧𝗵𝗼𝗻 🎡 𝗨𝘀𝗲𝗿𝗯𝗼𝘁", "https://t.me/+HIcYX7K58rFkMGZk")],[Button.url("الشروحات ²", "https://t.me/MMM07"), Button.url("الشروحات ¹", "https://t.me/zzzlvv")],[Button.url("حلـول الأخطـاء", "https://t.me/heroku_error")],[Button.url("𝗭𝗧𝗵𝗼𝗻 𝗦𝘂𝗽𝗽𝗼𝗿𝘁", "https://t.me/+HIcYX7K58rFkMGZk")],[Button.url("مطـور السـورس", "https://t.me/BBBlibot")]]
             )
     except Exception as e:
         LOGS.error(e)
@@ -284,7 +279,7 @@ async def saves():
                 continue
             else:
                 continue
-        await asyncio.sleep(0.5)
+        await asyncio.sleep(1)
 
 
 async def load_plugins(folder, extfolder=None):
